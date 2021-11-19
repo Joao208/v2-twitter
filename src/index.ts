@@ -1,6 +1,12 @@
 import axios, { AxiosInstance } from "axios";
 import { Fields, ParamsInterface } from "./types";
 
+// TODO tests
+// TODO documentation
+// TODO oauth
+// TODO other methods
+// TODO npm workflow
+// TODO realtime
 class TwitterApi {
   BearerToken: string | undefined;
   ConsumerKey: string | undefined;
