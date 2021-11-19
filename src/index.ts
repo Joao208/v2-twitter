@@ -1,9 +1,10 @@
 import axios, { AxiosInstance } from "axios";
 import { Fields, ParamsInterface } from "./types";
+import request from "request";
 
 // TODO tests
 // TODO documentation
-// TODO oauth
+// TODO oauth feito, só falta finalizar
 // TODO other methods
 // TODO npm workflow
 // TODO realtime
@@ -51,20 +52,6 @@ class TwitterApi {
 
         return options;
       });
-    } else {
-      // Start oauth logic, how does oauth with axios?
-
-      api.interceptors.request.use((options) => {
-        if (!options?.headers) return options;
-
-        const obj = {};
-
-        options.headers.Authorization = `Bearer ${BearerToken}`;
-
-        return options;
-      });
-
-      // End oauth logic
     }
 
     this.api = api;
@@ -191,12 +178,34 @@ class TwitterApi {
       });
   }
 
-  getMentionsTimeline(id: string) {
+  async getMentionsTimeline(id: string) {
     return "In progress";
   }
 
-  createTweet({ text }: { text: string }) {
-    return "In progress";
+  async createTweet({ text }: { text: string }) {
+    // @ts-ignore
+    const req = request.post({
+      oauth: {
+        consumer_key: "",
+        consumer_secret: "",
+        token: "",
+        token_secret: "",
+        timestamp: Math.floor(new Date().getTime() / 1000),
+      },
+      body: { text },
+      json: true,
+      url: "https://api.twitter.com/2/tweets",
+    });
+
+    let response;
+
+    req.on("response", function (res) {
+      req.on("data", function (chunk) {
+        response = chunk.toString("utf8");
+      });
+    });
+
+    return response;
   }
 
   deleteTweet(id: string) {
@@ -220,14 +229,14 @@ class TwitterApi {
 
 const twitter = new TwitterApi({
   BearerToken: "",
+  ConsumerKey: "",
+  ConsumerSecret: "",
+  AcessToken: "",
+  AcessSecret: "",
 });
 
-twitter
-  .getTimelineByUserId("1171894501587247104", {
-    expansions: ["attachments.media_keys"],
-    media: ["url"],
-  })
-  .then(({ data }) => console.log(data.includes));
+twitter.createTweet({ text: "Hello!" });
+// .then(({ data }) => console.log(data.includes));
 
 // End teste session
 
