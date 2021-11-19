@@ -7,7 +7,7 @@ import request from "request";
 // TODO oauth feito, só falta finalizar
 // TODO other methods
 // TODO npm workflow
-// TODO realtime
+// TODO realtime https://www.youtube.com/watch?v=PjjjhGW4ceM
 class TwitterApi {
   BearerToken: string | undefined;
   ConsumerKey: string | undefined;
