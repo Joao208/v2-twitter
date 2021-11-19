@@ -12,3 +12,12 @@ export interface Fields {
   expansions?: Array<string>;
   media?: Array<string>;
 }
+
+export interface BodyTwitter {
+  text: string;
+}
+
+export interface FieldsFollowers {
+  pagination?: string;
+  max?: number;
+}
