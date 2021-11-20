@@ -81,11 +81,12 @@ var TwitterApi = /** @class */ (function () {
                 return options;
             });
         }
-        var getParams = function (array, obj) {
+        var getParams = function (array, obj, isQueryParams) {
+            if (isQueryParams === void 0) { isQueryParams = false; }
             var params = [];
             for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
                 var _a = array_1[_i], fieldName = _a[0], fieldValues = _a[1];
-                params.push((params.length ? "&" : "?") +
+                params.push((params.length || isQueryParams ? "&" : "?") +
                     obj[fieldName] +
                     "=" +
                     fieldValues.join(","));
@@ -229,7 +230,7 @@ var TwitterApi = /** @class */ (function () {
                     case 0:
                         arrayFields = fields ? Object.entries(fields) : [];
                         ids = id.join(",");
-                        params = this.getParams(arrayFields, this.obj);
+                        params = this.getParams(arrayFields, this.obj, true);
                         return [4 /*yield*/, this.api
                                 .get("/tweets?ids=".concat(ids).concat(params.join("")))
                                 .catch(function (error) {
