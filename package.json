@@ -1,7 +1,9 @@
 {
   "name": "twitter_v2",
   "version": "1.0.1",
-  "main": "index.js",
+  "typings": "./src/index.ts",
+  "main": "dist/index.js",
+  "repository": "https://github.com/Joao208/twitter_v2",
   "license": "MIT",
   "scripts": {
     "start": "node src/index.ts",
