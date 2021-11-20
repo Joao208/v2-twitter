@@ -2,14 +2,10 @@ import axios, { AxiosInstance } from "axios";
 import { Fields, FieldsFollowers, ParamsInterface } from "./types";
 import request from "request";
 
-// TODO tests
-// TODO documentation
-// TODO oauth feito, só falta finalizar
-// TODO other methods
-// TODO npm workflow
 // TODO realtime https://www.youtube.com/watch?v=PjjjhGW4ceM
-// TODO refatorar e splitar funções repetitivas
+
 class TwitterApi {
+  obj: { [key: string]: string };
   BearerToken: string | undefined;
   ConsumerKey: string | undefined;
   ConsumerSecret: string | undefined;
@@ -17,6 +13,11 @@ class TwitterApi {
   AcessSecret: string | undefined;
   api: AxiosInstance;
   baseURL: string;
+  getPayload: (params: Object) => Object;
+  getParams: (
+    array: Array<[string, Array<String>]>,
+    obj: { [key: string]: string }
+  ) => Array<String>;
 
   constructor(data: ParamsInterface) {
     const {
@@ -58,6 +59,46 @@ class TwitterApi {
       });
     }
 
+    const getParams = (
+      array: Array<[string, Array<String>]>,
+      obj: { [key: string]: string }
+    ) => {
+      const params = [];
+
+      for (const [fieldName, fieldValues] of array) {
+        params.push(
+          (params.length ? "&" : "?") +
+            obj[fieldName] +
+            "=" +
+            fieldValues.join(",")
+        );
+      }
+
+      return params;
+    };
+
+    const getPayload = (params: Object) => {
+      return {
+        oauth: {
+          consumer_key: this.ConsumerKey,
+          consumer_secret: this.ConsumerSecret,
+          token: this.AcessToken,
+          token_secret: this.AcessSecret,
+          timestamp: Math.floor(new Date().getTime() / 1000),
+        },
+        ...params,
+      };
+    };
+
+    const obj = {
+      user: "user.fields",
+      tweet: "tweet.fields",
+      expansions: "expansions",
+      media: "media.fields",
+    };
+
+    this.obj = obj;
+    this.getParams = getParams;
     this.api = api;
     this.baseURL = baseURL;
     this.BearerToken = BearerToken;
@@ -65,6 +106,7 @@ class TwitterApi {
     this.ConsumerSecret = ConsumerSecret;
     this.AcessToken = AcessToken;
     this.AcessSecret = AcessSecret;
+    this.getPayload = getPayload;
   }
 
   async getUserByUsername(username: string, fields?: Array<string>) {
@@ -78,7 +120,7 @@ class TwitterApi {
   }
 
   async getUsersByUsersname(usernames: Array<String>, fields?: Array<string>) {
-    const params = fields?.length ? "?user.fields=" + fields.join("&") : "";
+    const params = fields?.length ? "&user.fields=" + fields.join("&") : "";
     const usernamesFormated = usernames.join(",");
 
     return this.api
@@ -97,7 +139,7 @@ class TwitterApi {
   }
 
   async getUsersById(id: Array<string>, fields?: Array<string>) {
-    const params = fields?.length ? "?user.fields=" + fields.join("&") : "";
+    const params = fields?.length ? "&user.fields=" + fields.join("&") : "";
     const ids = id.join(",");
 
     return this.api.get(`/users?ids=${ids}${params}`).catch((error) => {
@@ -108,23 +150,7 @@ class TwitterApi {
   async getSingleTweet(id: string, fields?: Fields) {
     const arrayFields = fields ? Object.entries(fields) : [];
 
-    const params = [];
-
-    for (const [fieldName, fieldValues] of arrayFields) {
-      const obj = {
-        user: "user.fields",
-        tweet: "tweet.fields",
-        expansions: "expansions",
-        media: "media.fields",
-      } as { [key: string]: string };
-
-      params.push(
-        (params.length ? "&" : "?") +
-          obj[fieldName] +
-          "=" +
-          fieldValues.join(",")
-      );
-    }
+    const params = this.getParams(arrayFields, this.obj);
 
     return this.api.get(`/tweets/${id}${params.join("")}`).catch((error) => {
       throw new Error(JSON.stringify(error?.response?.data));
@@ -135,18 +161,7 @@ class TwitterApi {
     const arrayFields = fields ? Object.entries(fields) : [];
     const ids = id.join(",");
 
-    const params = [];
-
-    for (const [fieldName, fieldValues] of arrayFields) {
-      const obj = {
-        user: "user.fields",
-        tweet: "tweet.fields",
-        expansions: "expansions",
-        media: "media.fields",
-      } as { [key: string]: string };
-
-      params.push("&" + obj[fieldName] + "=" + fieldValues.join(","));
-    }
+    const params = this.getParams(arrayFields, this.obj);
 
     return this.api
       .get(`/tweets?ids=${ids}${params.join("")}`)
@@ -158,23 +173,7 @@ class TwitterApi {
   async getTimelineByUserId(id: string, fields?: Fields) {
     const arrayFields = fields ? Object.entries(fields) : [];
 
-    const params = [];
-
-    for (const [fieldName, fieldValues] of arrayFields) {
-      const obj = {
-        user: "user.fields",
-        tweet: "tweet.fields",
-        expansions: "expansions",
-        media: "media.fields",
-      } as { [key: string]: string };
-
-      params.push(
-        (params.length ? "&" : "?") +
-          obj[fieldName] +
-          "=" +
-          fieldValues.join(",")
-      );
-    }
+    const params = this.getParams(arrayFields, this.obj);
 
     return this.api
       .get(`/users/${id}/tweets${params.join("")}`)
@@ -183,59 +182,34 @@ class TwitterApi {
       });
   }
 
-  async getMentionsTimeline(id: string) {
-    return "In progress";
-  }
-
   async createTweet(body: { text: string }) {
-    // TODO entender esse @ts-ignore
-    // @ts-ignore
-    const req = request.post({
-      oauth: {
-        consumer_key: this.ConsumerKey,
-        consumer_secret: this.ConsumerSecret,
-        token: this.AcessToken,
-        token_secret: this.AcessSecret,
-        timestamp: Math.floor(new Date().getTime() / 1000),
-      },
-      body,
-      json: true,
-      url: `${this.baseURL}/tweets`,
-    });
+    const req = request.post(
+      // @ts-ignore
+      this.getPayload({ body, json: true, url: `${this.baseURL}/tweets` })
+    );
 
-    let response;
-
-    req.on("response", function (res) {
-      req.on("data", function (chunk) {
-        response = chunk.toString("utf8");
+    return new Promise((resolve) => {
+      req.on("response", () => {
+        req.on("data", (chunk) => {
+          resolve(chunk.toString("utf8"));
+        });
       });
     });
-
-    return response;
   }
 
   async deleteTweet(id: string) {
-    // @ts-ignore
-    const req = request.delete({
-      oauth: {
-        consumer_key: this.ConsumerKey,
-        consumer_secret: this.ConsumerSecret,
-        token: this.AcessToken,
-        token_secret: this.AcessSecret,
-        timestamp: Math.floor(new Date().getTime() / 1000),
-      },
-      url: `${this.baseURL}/tweets/${id}`,
-    });
+    const req = request.delete(
+      // @ts-ignore
+      this.getPayload({ url: `${this.baseURL}/tweets/${id}` })
+    );
 
-    let response;
-
-    req.on("response", function (res) {
-      req.on("data", function (chunk) {
-        response = chunk.toString("utf8");
+    return new Promise((resolve) => {
+      req.on("response", () => {
+        req.on("data", (chunk) => {
+          resolve(chunk.toString("utf8"));
+        });
       });
     });
-
-    return response;
   }
 
   async getFollowersById(id: string, fields?: FieldsFollowers) {
@@ -261,49 +235,63 @@ class TwitterApi {
       });
   }
 
-  async followUserId(id: string) {
-    // @ts-ignore
-    const req = request.post({
-      oauth: {
-        consumer_key: this.ConsumerKey,
-        consumer_secret: this.ConsumerSecret,
-        token: this.AcessToken,
-        token_secret: this.AcessSecret,
-        timestamp: Math.floor(new Date().getTime() / 1000),
-      },
-      url: `${this.baseURL}/users/${id}/following`,
-    });
+  async followUserId(yourId: string, id: string) {
+    const req = request.post(
+      // @ts-ignore
+      this.getPayload({
+        body: {
+          target_user_id: id,
+        },
+        json: true,
+        url: `${this.baseURL}/users/${yourId}/following`,
+      })
+    );
 
-    let response;
-
-    req.on("response", function (res) {
-      req.on("data", function (chunk) {
-        response = chunk.toString("utf8");
+    return new Promise((resolve) => {
+      req.on("response", () => {
+        req.on("data", (chunk) => {
+          resolve(chunk.toString("utf8"));
+        });
       });
     });
-
-    // TODO retornar assim não funciona pois ele não espera o req.on
-    return response;
   }
 
-  async unfollowUserId(id: string) {
-    // TODO entender na documentação os parametros que precisam ser passados
-    return "In progress";
+  async unfollowUserId(yourId: string, id: string) {
+    const req = request.delete(
+      // @ts-ignore
+      this.getPayload({
+        url: `${this.baseURL}/users/${yourId}/following/${id}`,
+      })
+    );
+
+    return new Promise((resolve) => {
+      req.on("response", () => {
+        req.on("data", (chunk) => {
+          resolve(chunk.toString("utf8"));
+        });
+      });
+    });
+  }
+
+  async followUsername(yourUserName: string, username: string) {
+    const userToFollow = await this.getUserByUsername(username);
+    const yourUser = await this.getUserByUsername(yourUserName);
+
+    return this.followUserId(
+      yourUser?.data?.data?.id,
+      userToFollow?.data?.data?.id
+    );
+  }
+
+  async unfolowUsername(yourUserName: string, username: string) {
+    const userToFollow = await this.getUserByUsername(username);
+    const yourUser = await this.getUserByUsername(yourUserName);
+
+    return this.unfollowUserId(
+      yourUser?.data?.data?.id,
+      userToFollow?.data?.data?.id
+    );
   }
 }
 
-// Start Test session
-
-const twitter = new TwitterApi({
-  BearerToken: "",
-  ConsumerKey: "",
-  ConsumerSecret: "",
-  AcessToken: "",
-  AcessSecret: "",
-});
-
-twitter.followUserId("1171894501587247104").then((data) => console.log(data));
-
-// End teste session
-
-export { TwitterApi };
+export default TwitterApi;
