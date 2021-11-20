@@ -120,99 +120,147 @@ var TwitterApi = /** @class */ (function () {
     }
     TwitterApi.prototype.getUserByUsername = function (username, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var params;
+            var params, response;
             return __generator(this, function (_a) {
-                params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "?user.fields=" + fields.join("&") : "";
-                return [2 /*return*/, this.api
-                        .get("/users/by/username/".concat(username).concat(params))
-                        .catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "?user.fields=" + fields.join("&") : "";
+                        return [4 /*yield*/, this.api
+                                .get("/users/by/username/".concat(username).concat(params))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
+                }
             });
         });
     };
     TwitterApi.prototype.getUsersByUsersname = function (usernames, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var params, usernamesFormated;
+            var params, usernamesFormated, response;
             return __generator(this, function (_a) {
-                params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "&user.fields=" + fields.join("&") : "";
-                usernamesFormated = usernames.join(",");
-                return [2 /*return*/, this.api
-                        .get("/users/by?usernames=".concat(usernamesFormated).concat(params))
-                        .catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "&user.fields=" + fields.join("&") : "";
+                        usernamesFormated = usernames.join(",");
+                        return [4 /*yield*/, this.api
+                                .get("/users/by?usernames=".concat(usernamesFormated).concat(params))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
+                }
             });
         });
     };
     TwitterApi.prototype.getUserById = function (id, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var params;
+            var params, response;
             return __generator(this, function (_a) {
-                params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "?user.fields=" + fields.join("&") : "";
-                return [2 /*return*/, this.api.get("/users/".concat(id).concat(params)).catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "?user.fields=" + fields.join("&") : "";
+                        return [4 /*yield*/, this.api
+                                .get("/users/".concat(id).concat(params))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
+                }
             });
         });
     };
     TwitterApi.prototype.getUsersById = function (id, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var params, ids;
+            var params, ids, response;
             return __generator(this, function (_a) {
-                params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "&user.fields=" + fields.join("&") : "";
-                ids = id.join(",");
-                return [2 /*return*/, this.api.get("/users?ids=".concat(ids).concat(params)).catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "&user.fields=" + fields.join("&") : "";
+                        ids = id.join(",");
+                        return [4 /*yield*/, this.api
+                                .get("/users?ids=".concat(ids).concat(params))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
+                }
             });
         });
     };
     TwitterApi.prototype.getSingleTweet = function (id, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var arrayFields, params;
+            var arrayFields, params, response;
             return __generator(this, function (_a) {
-                arrayFields = fields ? Object.entries(fields) : [];
-                params = this.getParams(arrayFields, this.obj);
-                return [2 /*return*/, this.api.get("/tweets/".concat(id).concat(params.join(""))).catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        arrayFields = fields ? Object.entries(fields) : [];
+                        params = this.getParams(arrayFields, this.obj);
+                        return [4 /*yield*/, this.api
+                                .get("/tweets/".concat(id).concat(params.join("")))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
+                }
             });
         });
     };
     TwitterApi.prototype.getMultipleTweets = function (id, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var arrayFields, ids, params;
+            var arrayFields, ids, params, response;
             return __generator(this, function (_a) {
-                arrayFields = fields ? Object.entries(fields) : [];
-                ids = id.join(",");
-                params = this.getParams(arrayFields, this.obj);
-                return [2 /*return*/, this.api
-                        .get("/tweets?ids=".concat(ids).concat(params.join("")))
-                        .catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        arrayFields = fields ? Object.entries(fields) : [];
+                        ids = id.join(",");
+                        params = this.getParams(arrayFields, this.obj);
+                        return [4 /*yield*/, this.api
+                                .get("/tweets?ids=".concat(ids).concat(params.join("")))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
+                }
             });
         });
     };
     TwitterApi.prototype.getTimelineByUserId = function (id, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var arrayFields, params;
+            var arrayFields, params, response;
             return __generator(this, function (_a) {
-                arrayFields = fields ? Object.entries(fields) : [];
-                params = this.getParams(arrayFields, this.obj);
-                return [2 /*return*/, this.api
-                        .get("/users/".concat(id, "/tweets").concat(params.join("")))
-                        .catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
+                switch (_a.label) {
+                    case 0:
+                        arrayFields = fields ? Object.entries(fields) : [];
+                        params = this.getParams(arrayFields, this.obj);
+                        return [4 /*yield*/, this.api
+                                .get("/users/".concat(id, "/tweets").concat(params.join("")))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _a.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
+                }
             });
         });
     };
@@ -226,7 +274,7 @@ var TwitterApi = /** @class */ (function () {
                 return [2 /*return*/, new Promise(function (resolve) {
                         req.on("response", function () {
                             req.on("data", function (chunk) {
-                                resolve(chunk.toString("utf8"));
+                                resolve(JSON.parse(chunk.toString()));
                             });
                         });
                     })];
@@ -243,7 +291,7 @@ var TwitterApi = /** @class */ (function () {
                 return [2 /*return*/, new Promise(function (resolve) {
                         req.on("response", function () {
                             req.on("data", function (chunk) {
-                                resolve(chunk.toString("utf8"));
+                                resolve(JSON.parse(chunk.toString()));
                             });
                         });
                     })];
@@ -252,24 +300,30 @@ var TwitterApi = /** @class */ (function () {
     };
     TwitterApi.prototype.getFollowersById = function (id, fields) {
         return __awaiter(this, void 0, void 0, function () {
-            var arrayFields, params, _i, arrayFields_1, _a, fieldName, fieldValues, obj;
+            var arrayFields, params, _i, arrayFields_1, _a, fieldName, fieldValues, obj, response;
             return __generator(this, function (_b) {
-                arrayFields = fields ? Object.entries(fields) : [];
-                params = [];
-                for (_i = 0, arrayFields_1 = arrayFields; _i < arrayFields_1.length; _i++) {
-                    _a = arrayFields_1[_i], fieldName = _a[0], fieldValues = _a[1];
-                    obj = {
-                        pagination: "pagination_token",
-                        max: "max_results",
-                    };
-                    params.push((params.length ? "&" : "?") + obj[fieldName] + "=" + fieldValues);
+                switch (_b.label) {
+                    case 0:
+                        arrayFields = fields ? Object.entries(fields) : [];
+                        params = [];
+                        for (_i = 0, arrayFields_1 = arrayFields; _i < arrayFields_1.length; _i++) {
+                            _a = arrayFields_1[_i], fieldName = _a[0], fieldValues = _a[1];
+                            obj = {
+                                pagination: "pagination_token",
+                                max: "max_results",
+                            };
+                            params.push((params.length ? "&" : "?") + obj[fieldName] + "=" + fieldValues);
+                        }
+                        return [4 /*yield*/, this.api
+                                .get("/users/".concat(id, "/followers").concat(params.join("")))
+                                .catch(function (error) {
+                                var _a;
+                                throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
+                            })];
+                    case 1:
+                        response = _b.sent();
+                        return [2 /*return*/, response === null || response === void 0 ? void 0 : response.data];
                 }
-                return [2 /*return*/, this.api
-                        .get("/users/".concat(id, "/followers").concat(params.join("")))
-                        .catch(function (error) {
-                        var _a;
-                        throw new Error(JSON.stringify((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.data));
-                    })];
             });
         });
     };
@@ -289,7 +343,7 @@ var TwitterApi = /** @class */ (function () {
                 return [2 /*return*/, new Promise(function (resolve) {
                         req.on("response", function () {
                             req.on("data", function (chunk) {
-                                resolve(chunk.toString("utf8"));
+                                resolve(JSON.parse(chunk.toString()));
                             });
                         });
                     })];
@@ -308,7 +362,7 @@ var TwitterApi = /** @class */ (function () {
                 return [2 /*return*/, new Promise(function (resolve) {
                         req.on("response", function () {
                             req.on("data", function (chunk) {
-                                resolve(chunk.toString("utf8"));
+                                resolve(JSON.parse(chunk.toString()));
                             });
                         });
                     })];
@@ -316,35 +370,35 @@ var TwitterApi = /** @class */ (function () {
         });
     };
     TwitterApi.prototype.followUsername = function (yourUserName, username) {
-        var _a, _b, _c, _d;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var userToFollow, yourUser;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0: return [4 /*yield*/, this.getUserByUsername(username)];
                     case 1:
-                        userToFollow = _e.sent();
+                        userToFollow = _c.sent();
                         return [4 /*yield*/, this.getUserByUsername(yourUserName)];
                     case 2:
-                        yourUser = _e.sent();
-                        return [2 /*return*/, this.followUserId((_b = (_a = yourUser === null || yourUser === void 0 ? void 0 : yourUser.data) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.id, (_d = (_c = userToFollow === null || userToFollow === void 0 ? void 0 : userToFollow.data) === null || _c === void 0 ? void 0 : _c.data) === null || _d === void 0 ? void 0 : _d.id)];
+                        yourUser = _c.sent();
+                        return [2 /*return*/, this.followUserId((_a = yourUser === null || yourUser === void 0 ? void 0 : yourUser.data) === null || _a === void 0 ? void 0 : _a.id, (_b = userToFollow === null || userToFollow === void 0 ? void 0 : userToFollow.data) === null || _b === void 0 ? void 0 : _b.id)];
                 }
             });
         });
     };
     TwitterApi.prototype.unfolowUsername = function (yourUserName, username) {
-        var _a, _b, _c, _d;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var userToFollow, yourUser;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0: return [4 /*yield*/, this.getUserByUsername(username)];
                     case 1:
-                        userToFollow = _e.sent();
+                        userToFollow = _c.sent();
                         return [4 /*yield*/, this.getUserByUsername(yourUserName)];
                     case 2:
-                        yourUser = _e.sent();
-                        return [2 /*return*/, this.unfollowUserId((_b = (_a = yourUser === null || yourUser === void 0 ? void 0 : yourUser.data) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.id, (_d = (_c = userToFollow === null || userToFollow === void 0 ? void 0 : userToFollow.data) === null || _c === void 0 ? void 0 : _c.data) === null || _d === void 0 ? void 0 : _d.id)];
+                        yourUser = _c.sent();
+                        return [2 /*return*/, this.unfollowUserId((_a = yourUser === null || yourUser === void 0 ? void 0 : yourUser.data) === null || _a === void 0 ? void 0 : _a.id, (_b = userToFollow === null || userToFollow === void 0 ? void 0 : userToFollow.data) === null || _b === void 0 ? void 0 : _b.id)];
                 }
             });
         });
