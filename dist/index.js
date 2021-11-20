@@ -65,7 +65,7 @@ var TwitterApi = /** @class */ (function () {
         ];
         var objectKeys = Object.keys(data);
         if (!objectKeys.includes("BearerToken") && objectKeys !== array) {
-            throw new Error("Ao menos um parâmetro de login é necessário");
+            throw new Error("Ao menos um método de login é necessário");
         }
         var baseURL = "https://api.twitter.com/2";
         var api = axios_1.default.create({
@@ -73,7 +73,7 @@ var TwitterApi = /** @class */ (function () {
             timeout: 30000,
             headers: { Authorization: "Bearer ".concat(BearerToken) },
         });
-        if (!objectKeys.includes("BearerToken")) {
+        if (objectKeys.includes("BearerToken")) {
             api.interceptors.request.use(function (options) {
                 if (!(options === null || options === void 0 ? void 0 : options.headers))
                     return options;
