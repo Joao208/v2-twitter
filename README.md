@@ -1,5 +1,6 @@
 ## Twitter V2
 
+[![v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
 [![codecov](https://codecov.io/gh/Joao208/v2-twitter/branch/main/graph/badge.svg?token=YK3MIN9SMX)](https://codecov.io/gh/Joao208/v2-twitter)
 
 Twitter api, using [V2](https://developer.twitter.com/en), for use, create new instance of api, no parameter is necessary, but if you don't pass BearerToken, the others params `ConsumerKey, ConsumerSecret, AcessToken, AcessSecret` are necessary, but you can pass all parameters
@@ -284,5 +285,14 @@ twitter
 //     }
 // }
 ```
+
+#### V1.1 API Support
+
+This module does not support previous versions of the Twitter API, however it
+works well with the following V1.1 modules
+
+[![NPM](https://nodei.co/npm/twitter.png?compact=true)](https://nodei.co/npm/twitter/)
+
+[![NPM](https://nodei.co/npm/twit.png?compact=true)](https://nodei.co/npm/twit/)
 
 ##### More methods will come...

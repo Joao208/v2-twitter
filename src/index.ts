@@ -1,6 +1,13 @@
-import axios, { AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
 import { Fields, FieldsFollowers, ParamsInterface } from "./types";
 import request from "request";
+import {
+  checkFields,
+  getApi,
+  getArrayFields,
+  getParams,
+  returnPromise,
+} from "./utils";
 
 // TODO realtime https://www.youtube.com/watch?v=PjjjhGW4ceM
 
@@ -15,11 +22,11 @@ class TwitterApi {
   baseURL: string;
   getPayload: (params: Object) => Object;
   getParams: (
-    array: Array<[string, Array<String>]>,
-    obj: { [key: string]: string },
+    arrayToCheck: Array<[string, Array<string>]>,
+    objOfFields: { [key: string]: string },
     isQueryParams?: boolean
-  ) => Array<String>;
-  checkFields: (fields?: Array<String>, isQueryParams?: boolean) => String;
+  ) => Array<string>;
+  checkFields: (fields?: Array<string>, isQueryParams?: boolean) => string;
   getArrayFields: (fields?: Fields | FieldsFollowers) => Array<any>;
 
   constructor(data: ParamsInterface) {
@@ -42,47 +49,14 @@ class TwitterApi {
 
     if (
       !objectKeys.includes("BearerToken") &&
-      array.sort().join(",") !== objectKeys.sort().join(",")
+      [...array].sort().join(",") !== [...objectKeys].sort().join(",")
     ) {
       throw new Error("Ao menos um método de login é necessário");
     }
 
     const baseURL = "https://api.twitter.com/2";
 
-    const api = axios.create({
-      baseURL,
-      timeout: 30000,
-      headers: { Authorization: `Bearer ${BearerToken}` },
-    });
-
-    if (objectKeys.includes("BearerToken")) {
-      api.interceptors.request.use((options) => {
-        if (!options?.headers) return options;
-
-        options.headers.Authorization = `Bearer ${BearerToken}`;
-
-        return options;
-      });
-    }
-
-    const getParams = (
-      array: Array<[string, Array<String>]>,
-      obj: { [key: string]: string },
-      isQueryParams: boolean = false
-    ) => {
-      const params = [];
-
-      for (const [fieldName, fieldValues] of array) {
-        params.push(
-          (params.length || isQueryParams ? "&" : "?") +
-            obj[fieldName] +
-            "=" +
-            fieldValues.join(",")
-        );
-      }
-
-      return params;
-    };
+    const api = getApi({ baseURL, objectKeys, BearerToken });
 
     const getPayload = (params: Object) => {
       return {
@@ -95,16 +69,6 @@ class TwitterApi {
         },
         ...params,
       };
-    };
-
-    const checkFields = (fields?: Array<String>, isQueryParams?: boolean) => {
-      return fields?.length
-        ? `${isQueryParams ? "&" : "?"}user.fields=` + fields.join("&")
-        : "";
-    };
-
-    const getArrayFields = (fields?: Fields | FieldsFollowers) => {
-      return fields ? Object.entries(fields) : [];
     };
 
     const obj = {
@@ -140,7 +104,7 @@ class TwitterApi {
     return response?.data;
   }
 
-  async getUsersByUsersname(usernames: Array<String>, fields?: Array<string>) {
+  async getUsersByUsersname(usernames: Array<string>, fields?: Array<string>) {
     const params = this.checkFields(fields, true);
     const usernamesFormated = usernames.join(",");
 
@@ -227,13 +191,7 @@ class TwitterApi {
       this.getPayload({ body, json: true, url: `${this.baseURL}/tweets` })
     );
 
-    return new Promise((resolve) => {
-      req.on("response", () => {
-        req.on("data", (chunk) => {
-          resolve(JSON.parse(chunk.toString()));
-        });
-      });
-    });
+    return returnPromise(req);
   }
 
   async deleteTweet(id: string) {
@@ -242,13 +200,7 @@ class TwitterApi {
       this.getPayload({ url: `${this.baseURL}/tweets/${id}` })
     );
 
-    return new Promise((resolve) => {
-      req.on("response", () => {
-        req.on("data", (chunk) => {
-          resolve(JSON.parse(chunk.toString()));
-        });
-      });
-    });
+    return returnPromise(req);
   }
 
   async getFollowersById(id: string, fields?: FieldsFollowers) {
@@ -288,13 +240,7 @@ class TwitterApi {
       })
     );
 
-    return new Promise((resolve) => {
-      req.on("response", () => {
-        req.on("data", (chunk) => {
-          resolve(JSON.parse(chunk.toString()));
-        });
-      });
-    });
+    return returnPromise(req);
   }
 
   async unfollowUserId(yourId: string, id: string) {
@@ -305,13 +251,7 @@ class TwitterApi {
       })
     );
 
-    return new Promise((resolve) => {
-      req.on("response", () => {
-        req.on("data", (chunk) => {
-          resolve(JSON.parse(chunk.toString()));
-        });
-      });
-    });
+    return returnPromise(req);
   }
 
   async followUsername(yourUserName: string, username: string) {
