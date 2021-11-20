@@ -154,7 +154,7 @@ twitter
 
 #### Create new Tweet
 
-🚨 For post/create new Tweet is necessary oauth login and write access 🚨 <br>
+🚨 For post/create new Tweet is necessary [oauth](https://developer.twitter.com/en/docs/authentication/overview) login and write access 🚨 <br>
 For create new tweet: all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
@@ -172,7 +172,7 @@ twitter
 
 #### Delete Tweet by Id
 
-🚨 For delete Tweet is necessary oauth login and write access 🚨 <br>
+🚨 For delete Tweet is necessary [oauth](https://developer.twitter.com/en/docs/authentication/overview) login and write access 🚨 <br>
 For delete tweet:
 
 ```js
@@ -213,7 +213,7 @@ twitter
 
 #### Follow User 
 
-🚨 For follow user is necessary oauth login and write access 🚨 <br>
+🚨 For follow user is necessary [oauth](https://developer.twitter.com/en/docs/authentication/overview) login and write access 🚨 <br>
 Your id on the left, and id to follow in right <br>
 For follow a user:
 
@@ -232,7 +232,7 @@ twitter
 
 #### Unfollow User
 
-🚨 For unfollow user is necessary oauth login and write access 🚨 <br>
+🚨 For unfollow user is necessary [oauth](https://developer.twitter.com/en/docs/authentication/overview) login and write access 🚨 <br>
 Your id on the left, and id to unfollow in right <br>
 For unfollow a user:
 
@@ -250,7 +250,7 @@ twitter
 
 #### Follow User By Username
 
-🚨 For this method necessary oauth login, bearer token and write access 🚨 <br>
+🚨 For this method necessary [oauth](https://developer.twitter.com/en/docs/authentication/overview) login, bearer token and write access 🚨 <br>
 Your username on the left, and username to follow in right <br>
 For unfollow a user by username:
 
@@ -269,7 +269,7 @@ twitter
 
 #### Unfollow User By Username
 
-🚨 For this method necessary oauth login, bearer token and write access 🚨 <br>
+🚨 For this method necessary [oauth](https://developer.twitter.com/en/docs/authentication/overview) login, bearer token and write access 🚨 <br>
 Your username on the left, and username to unfollow in right <br>
 For unfollow a user by username:
 
