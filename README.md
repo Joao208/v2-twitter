@@ -5,7 +5,7 @@
 Twitter api, using [V2](https://developer.twitter.com/en), for use, create new instance of api, no parameter is necessary, but if you don't pass BearerToken, the others params `ConsumerKey, ConsumerSecret, AcessToken, AcessSecret` are necessary, but you can pass all parameters
 
 ```js
-import TwitterApi from ''
+import TwitterApi from 'v2-twitter'
 
 const twitter = new TwitterApi({
   BearerToken: "",
