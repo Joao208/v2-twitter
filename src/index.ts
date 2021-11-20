@@ -16,7 +16,8 @@ class TwitterApi {
   getPayload: (params: Object) => Object;
   getParams: (
     array: Array<[string, Array<String>]>,
-    obj: { [key: string]: string }
+    obj: { [key: string]: string },
+    isQueryParams?: boolean
   ) => Array<String>;
 
   constructor(data: ParamsInterface) {
@@ -61,13 +62,14 @@ class TwitterApi {
 
     const getParams = (
       array: Array<[string, Array<String>]>,
-      obj: { [key: string]: string }
+      obj: { [key: string]: string },
+      isQueryParams: boolean = false
     ) => {
       const params = [];
 
       for (const [fieldName, fieldValues] of array) {
         params.push(
-          (params.length ? "&" : "?") +
+          (params.length || isQueryParams ? "&" : "?") +
             obj[fieldName] +
             "=" +
             fieldValues.join(",")
@@ -177,7 +179,7 @@ class TwitterApi {
     const arrayFields = fields ? Object.entries(fields) : [];
     const ids = id.join(",");
 
-    const params = this.getParams(arrayFields, this.obj);
+    const params = this.getParams(arrayFields, this.obj, true);
 
     const response = await this.api
       .get(`/tweets?ids=${ids}${params.join("")}`)
