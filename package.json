@@ -30,6 +30,7 @@
     "@babel/preset-env": "^7.15.8",
     "@babel/preset-typescript": "^7.15.0",
     "@types/jest": "^27.0.3",
+    "@types/mocha": "^9.0.0",
     "babel-jest": "^27.2.5",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "jest": "^27.2.5"

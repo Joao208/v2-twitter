@@ -149,7 +149,7 @@ describe("Twitter Class", () => {
       new TwitterApi({});
     } catch (error) {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe("Ao menos um parâmetro de login é necessário");
+      expect(error.message).toBe("Ao menos um método de login é necessário");
     }
   });
 });

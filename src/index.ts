@@ -39,7 +39,7 @@ class TwitterApi {
     const objectKeys = Object.keys(data);
 
     if (!objectKeys.includes("BearerToken") && objectKeys !== array) {
-      throw new Error("Ao menos um parâmetro de login é necessário");
+      throw new Error("Ao menos um método de login é necessário");
     }
 
     const baseURL = "https://api.twitter.com/2";
@@ -50,7 +50,7 @@ class TwitterApi {
       headers: { Authorization: `Bearer ${BearerToken}` },
     });
 
-    if (!objectKeys.includes("BearerToken")) {
+    if (objectKeys.includes("BearerToken")) {
       api.interceptors.request.use((options) => {
         if (!options?.headers) return options;
 
