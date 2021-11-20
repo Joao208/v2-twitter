@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/Joao208/twitter_v2/branch/main/graph/badge.svg?token=YK3MIN9SMX)](https://codecov.io/gh/Joao208/twitter_v2)
 
-Twitter api, using [https://developer.twitter.com/en](V2), for use, create new instance of api, no parameter is necessary, but if you don't pass BearerToken, the others params `ConsumerKey, ConsumerSecret, AcessToken, AcessSecret` is necessary, but you can pass all parameters
+Twitter api, using [V2](https://developer.twitter.com/en), for use, create new instance of api, no parameter is necessary, but if you don't pass BearerToken, the others params `ConsumerKey, ConsumerSecret, AcessToken, AcessSecret` are necessary, but you can pass all parameters
 
 ```js
 import TwitterApi from ''
@@ -17,7 +17,7 @@ const twitter = new TwitterApi({
 ```
 #### Get An User By Username
 
-For get all user informations:, all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get all user informations:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -27,7 +27,7 @@ twitter
 
 #### Get Many Users For Username
 
-For get all user informations for many users:, all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get all user informations for many users:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -37,7 +37,7 @@ twitter
 
 #### Get User For UserId
 
-For get all user informations by user id:, all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get all user informations by user id:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -47,7 +47,7 @@ twitter
 
 #### Get Many Users For UserId
 
-For get all user informations by user id for many users:, all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get all user informations by user id for many users:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -57,7 +57,7 @@ twitter
 
 #### Get Tweet By Id
 
-For get tweet data for tweet id: all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get tweet data for tweet id: all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -67,7 +67,7 @@ twitter
 
 #### Get Many Tweets by Id
 
-For get tweet data for many tweets id: all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get tweet data for many tweets id: all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -77,7 +77,7 @@ twitter
 
 #### Get User Timeline By UserId
 
-For get timeline of user by userid: all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get timeline of user by user id: all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -87,8 +87,8 @@ twitter
 
 #### Create new Tweet
 
-🚨 For post/create new Tweet is necessary oauth login and write access 🚨
-For create new tweet: all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+🚨 For post/create new Tweet is necessary oauth login and write access 🚨 <br>
+For create new tweet: all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -98,7 +98,7 @@ twitter
 
 #### Delete Tweet by Id
 
-🚨 For delete Tweet is necessary oauth login and write access 🚨
+🚨 For delete Tweet is necessary oauth login and write access 🚨 <br>
 For delete tweet:
 
 ```js
@@ -109,7 +109,7 @@ twitter
 
 #### Get Followers By UserId
 
-For get all followers for user by id: all parameters and fields can be consulted [https://developer.twitter.com/en/docs/twitter-api/fields](here)
+For get all followers for user by id: all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -119,8 +119,8 @@ twitter
 
 #### Follow User 
 
-🚨 For follow user is necessary oauth login and write access 🚨
-For follow an user:
+🚨 For follow user is necessary oauth login and write access 🚨 <br>
+For follow a user:
 
 ```js
 twitter
@@ -130,8 +130,8 @@ twitter
 
 #### Unfollow User
 
-🚨 For unfollow user is necessary oauth login and write access 🚨
-For unfollow an user:
+🚨 For unfollow user is necessary oauth login and write access 🚨 <br>
+For unfollow a user:
 
 ```js
 twitter
@@ -141,8 +141,8 @@ twitter
 
 #### Follow User By Username
 
-🚨 For this method necessary oauth login, bearer token and write access 🚨
-For unfollow an user by username:
+🚨 For this method necessary oauth login, bearer token and write access 🚨 <br>
+For unfollow a user by username:
 
 ```js
 twitter
@@ -152,11 +152,13 @@ twitter
 
 #### Unfollow User By Username
 
-🚨 For this method necessary oauth login, bearer token and write access 🚨
-For unfollow an user by username:
+🚨 For this method necessary oauth login, bearer token and write access 🚨 <br>
+For unfollow a user by username:
 
 ```js
 twitter
   .unfolowUsername('TwitterDev', 'TwitterDev')
   .then((data) => console.log(data));
 ```
+
+##### More methods will come...
