@@ -15,6 +15,11 @@ describe("Twitter Class", () => {
         data: { mocked: true },
         catch: jest.fn().mockReturnValue({ data: { mocked: true } }),
       }),
+      interceptors: {
+        request: {
+          use: jest.fn((callback) => callback(true)),
+        },
+      },
     }));
 
     // @ts-ignore
