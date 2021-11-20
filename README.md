@@ -1,6 +1,6 @@
 ## Twitter V2
 
-[![codecov](https://codecov.io/gh/Joao208/express-http-redis/branch/main/graph/badge.svg?token=50MD3A8XVM)](https://codecov.io/gh/Joao208/express-http-redis)
+[![codecov](https://codecov.io/gh/Joao208/twitter_v2/branch/main/graph/badge.svg?token=YK3MIN9SMX)](https://codecov.io/gh/Joao208/twitter_v2)
 
 Twitter api, using [https://developer.twitter.com/en](V2), for use, create new instance of api, no parameter is necessary, but if you don't pass BearerToken, the others params `ConsumerKey, ConsumerSecret, AcessToken, AcessSecret` is necessary, but you can pass all parameters
 
