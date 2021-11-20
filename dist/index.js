@@ -46,12 +46,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var axios_1 = __importDefault(require("axios"));
 var request_1 = __importDefault(require("request"));
+var utils_1 = require("./utils");
 // TODO realtime https://www.youtube.com/watch?v=PjjjhGW4ceM
 var TwitterApi = /** @class */ (function () {
     function TwitterApi(data) {
@@ -65,35 +74,11 @@ var TwitterApi = /** @class */ (function () {
         ];
         var objectKeys = Object.keys(data);
         if (!objectKeys.includes("BearerToken") &&
-            array.sort().join(",") !== objectKeys.sort().join(",")) {
+            __spreadArray([], array, true).sort().join(",") !== __spreadArray([], objectKeys, true).sort().join(",")) {
             throw new Error("Ao menos um método de login é necessário");
         }
         var baseURL = "https://api.twitter.com/2";
-        var api = axios_1.default.create({
-            baseURL: baseURL,
-            timeout: 30000,
-            headers: { Authorization: "Bearer ".concat(BearerToken) },
-        });
-        if (objectKeys.includes("BearerToken")) {
-            api.interceptors.request.use(function (options) {
-                if (!(options === null || options === void 0 ? void 0 : options.headers))
-                    return options;
-                options.headers.Authorization = "Bearer ".concat(BearerToken);
-                return options;
-            });
-        }
-        var getParams = function (array, obj, isQueryParams) {
-            if (isQueryParams === void 0) { isQueryParams = false; }
-            var params = [];
-            for (var _i = 0, array_1 = array; _i < array_1.length; _i++) {
-                var _a = array_1[_i], fieldName = _a[0], fieldValues = _a[1];
-                params.push((params.length || isQueryParams ? "&" : "?") +
-                    obj[fieldName] +
-                    "=" +
-                    fieldValues.join(","));
-            }
-            return params;
-        };
+        var api = (0, utils_1.getApi)({ baseURL: baseURL, objectKeys: objectKeys, BearerToken: BearerToken });
         var getPayload = function (params) {
             return __assign({ oauth: {
                     consumer_key: _this.ConsumerKey,
@@ -103,24 +88,16 @@ var TwitterApi = /** @class */ (function () {
                     timestamp: Math.floor(new Date().getTime() / 1000),
                 } }, params);
         };
-        var checkFields = function (fields, isQueryParams) {
-            return (fields === null || fields === void 0 ? void 0 : fields.length)
-                ? "".concat(isQueryParams ? "&" : "?", "user.fields=") + fields.join("&")
-                : "";
-        };
-        var getArrayFields = function (fields) {
-            return fields ? Object.entries(fields) : [];
-        };
         var obj = {
             user: "user.fields",
             tweet: "tweet.fields",
             expansions: "expansions",
             media: "media.fields",
         };
-        this.getArrayFields = getArrayFields;
-        this.checkFields = checkFields;
+        this.getArrayFields = utils_1.getArrayFields;
+        this.checkFields = utils_1.checkFields;
         this.obj = obj;
-        this.getParams = getParams;
+        this.getParams = utils_1.getParams;
         this.api = api;
         this.baseURL = baseURL;
         this.BearerToken = BearerToken;
@@ -283,13 +260,7 @@ var TwitterApi = /** @class */ (function () {
                 req = request_1.default.post(
                 // @ts-ignore
                 this.getPayload({ body: body, json: true, url: "".concat(this.baseURL, "/tweets") }));
-                return [2 /*return*/, new Promise(function (resolve) {
-                        req.on("response", function () {
-                            req.on("data", function (chunk) {
-                                resolve(JSON.parse(chunk.toString()));
-                            });
-                        });
-                    })];
+                return [2 /*return*/, (0, utils_1.returnPromise)(req)];
             });
         });
     };
@@ -300,13 +271,7 @@ var TwitterApi = /** @class */ (function () {
                 req = request_1.default.delete(
                 // @ts-ignore
                 this.getPayload({ url: "".concat(this.baseURL, "/tweets/").concat(id) }));
-                return [2 /*return*/, new Promise(function (resolve) {
-                        req.on("response", function () {
-                            req.on("data", function (chunk) {
-                                resolve(JSON.parse(chunk.toString()));
-                            });
-                        });
-                    })];
+                return [2 /*return*/, (0, utils_1.returnPromise)(req)];
             });
         });
     };
@@ -352,13 +317,7 @@ var TwitterApi = /** @class */ (function () {
                     json: true,
                     url: "".concat(this.baseURL, "/users/").concat(yourId, "/following"),
                 }));
-                return [2 /*return*/, new Promise(function (resolve) {
-                        req.on("response", function () {
-                            req.on("data", function (chunk) {
-                                resolve(JSON.parse(chunk.toString()));
-                            });
-                        });
-                    })];
+                return [2 /*return*/, (0, utils_1.returnPromise)(req)];
             });
         });
     };
@@ -371,13 +330,7 @@ var TwitterApi = /** @class */ (function () {
                 this.getPayload({
                     url: "".concat(this.baseURL, "/users/").concat(yourId, "/following/").concat(id),
                 }));
-                return [2 /*return*/, new Promise(function (resolve) {
-                        req.on("response", function () {
-                            req.on("data", function (chunk) {
-                                resolve(JSON.parse(chunk.toString()));
-                            });
-                        });
-                    })];
+                return [2 /*return*/, (0, utils_1.returnPromise)(req)];
             });
         });
     };
