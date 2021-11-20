@@ -112,39 +112,51 @@ class TwitterApi {
   async getUserByUsername(username: string, fields?: Array<string>) {
     const params = fields?.length ? "?user.fields=" + fields.join("&") : "";
 
-    return this.api
+    const response = await this.api
       .get(`/users/by/username/${username}${params}`)
       .catch((error) => {
         throw new Error(JSON.stringify(error?.response?.data));
       });
+
+    return response?.data;
   }
 
   async getUsersByUsersname(usernames: Array<String>, fields?: Array<string>) {
     const params = fields?.length ? "&user.fields=" + fields.join("&") : "";
     const usernamesFormated = usernames.join(",");
 
-    return this.api
+    const response = await this.api
       .get(`/users/by?usernames=${usernamesFormated}${params}`)
       .catch((error) => {
         throw new Error(JSON.stringify(error?.response?.data));
       });
+
+    return response?.data;
   }
 
   async getUserById(id: string, fields?: Array<string>) {
     const params = fields?.length ? "?user.fields=" + fields.join("&") : "";
 
-    return this.api.get(`/users/${id}${params}`).catch((error) => {
-      throw new Error(JSON.stringify(error?.response?.data));
-    });
+    const response = await this.api
+      .get(`/users/${id}${params}`)
+      .catch((error) => {
+        throw new Error(JSON.stringify(error?.response?.data));
+      });
+
+    return response?.data;
   }
 
   async getUsersById(id: Array<string>, fields?: Array<string>) {
     const params = fields?.length ? "&user.fields=" + fields.join("&") : "";
     const ids = id.join(",");
 
-    return this.api.get(`/users?ids=${ids}${params}`).catch((error) => {
-      throw new Error(JSON.stringify(error?.response?.data));
-    });
+    const response = await this.api
+      .get(`/users?ids=${ids}${params}`)
+      .catch((error) => {
+        throw new Error(JSON.stringify(error?.response?.data));
+      });
+
+    return response?.data;
   }
 
   async getSingleTweet(id: string, fields?: Fields) {
@@ -152,9 +164,13 @@ class TwitterApi {
 
     const params = this.getParams(arrayFields, this.obj);
 
-    return this.api.get(`/tweets/${id}${params.join("")}`).catch((error) => {
-      throw new Error(JSON.stringify(error?.response?.data));
-    });
+    const response = await this.api
+      .get(`/tweets/${id}${params.join("")}`)
+      .catch((error) => {
+        throw new Error(JSON.stringify(error?.response?.data));
+      });
+
+    return response?.data;
   }
 
   async getMultipleTweets(id: Array<string>, fields?: Fields) {
@@ -163,11 +179,13 @@ class TwitterApi {
 
     const params = this.getParams(arrayFields, this.obj);
 
-    return this.api
+    const response = await this.api
       .get(`/tweets?ids=${ids}${params.join("")}`)
       .catch((error) => {
         throw new Error(JSON.stringify(error?.response?.data));
       });
+
+    return response?.data;
   }
 
   async getTimelineByUserId(id: string, fields?: Fields) {
@@ -175,11 +193,13 @@ class TwitterApi {
 
     const params = this.getParams(arrayFields, this.obj);
 
-    return this.api
+    const response = await this.api
       .get(`/users/${id}/tweets${params.join("")}`)
       .catch((error) => {
         throw new Error(JSON.stringify(error?.response?.data));
       });
+
+    return response?.data;
   }
 
   async createTweet(body: { text: string }) {
@@ -191,7 +211,7 @@ class TwitterApi {
     return new Promise((resolve) => {
       req.on("response", () => {
         req.on("data", (chunk) => {
-          resolve(chunk.toString("utf8"));
+          resolve(JSON.parse(chunk.toString()));
         });
       });
     });
@@ -206,7 +226,7 @@ class TwitterApi {
     return new Promise((resolve) => {
       req.on("response", () => {
         req.on("data", (chunk) => {
-          resolve(chunk.toString("utf8"));
+          resolve(JSON.parse(chunk.toString()));
         });
       });
     });
@@ -228,11 +248,13 @@ class TwitterApi {
       );
     }
 
-    return this.api
+    const response = await this.api
       .get(`/users/${id}/followers${params.join("")}`)
       .catch((error) => {
         throw new Error(JSON.stringify(error?.response?.data));
       });
+
+    return response?.data;
   }
 
   async followUserId(yourId: string, id: string) {
@@ -250,7 +272,7 @@ class TwitterApi {
     return new Promise((resolve) => {
       req.on("response", () => {
         req.on("data", (chunk) => {
-          resolve(chunk.toString("utf8"));
+          resolve(JSON.parse(chunk.toString()));
         });
       });
     });
@@ -267,7 +289,7 @@ class TwitterApi {
     return new Promise((resolve) => {
       req.on("response", () => {
         req.on("data", (chunk) => {
-          resolve(chunk.toString("utf8"));
+          resolve(JSON.parse(chunk.toString()));
         });
       });
     });
@@ -277,20 +299,14 @@ class TwitterApi {
     const userToFollow = await this.getUserByUsername(username);
     const yourUser = await this.getUserByUsername(yourUserName);
 
-    return this.followUserId(
-      yourUser?.data?.data?.id,
-      userToFollow?.data?.data?.id
-    );
+    return this.followUserId(yourUser?.data?.id, userToFollow?.data?.id);
   }
 
   async unfolowUsername(yourUserName: string, username: string) {
     const userToFollow = await this.getUserByUsername(username);
     const yourUser = await this.getUserByUsername(yourUserName);
 
-    return this.unfollowUserId(
-      yourUser?.data?.data?.id,
-      userToFollow?.data?.data?.id
-    );
+    return this.unfollowUserId(yourUser?.data?.id, userToFollow?.data?.id);
   }
 }
 

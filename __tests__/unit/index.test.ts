@@ -19,12 +19,16 @@ describe("Twitter Class", () => {
 
     // @ts-ignore
     request.post.mockImplementation(() => ({
-      on: jest.fn((type, callback) => callback({ mocked: true })),
+      on: jest.fn((type, callback) =>
+        callback(Buffer.from(JSON.stringify({ mocked: true })))
+      ),
     }));
 
     // @ts-ignore
     request.delete.mockImplementation(() => ({
-      on: jest.fn((type, callback) => callback({ mocked: true })),
+      on: jest.fn((type, callback) =>
+        callback(Buffer.from(JSON.stringify({ mocked: true })))
+      ),
     }));
 
     app = new TwitterApi({ BearerToken: "" });
@@ -40,7 +44,7 @@ describe("Twitter Class", () => {
         "profile_image_url",
       ]);
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
 
     it("Should be get users by usernames", async () => {
@@ -49,7 +53,7 @@ describe("Twitter Class", () => {
         ["picture"]
       );
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
 
     it("Should be get user by user id", async () => {
@@ -57,7 +61,7 @@ describe("Twitter Class", () => {
         "profile_image_url",
       ]);
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
 
     it("Should be get user by users ids", async () => {
@@ -66,7 +70,7 @@ describe("Twitter Class", () => {
         ["profile_image_url"]
       );
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
 
     it("Should be get tweet by id", async () => {
@@ -74,7 +78,7 @@ describe("Twitter Class", () => {
         media: ["profile_image_url"],
       });
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
 
     it("Should be get multiple tweets by id", async () => {
@@ -82,7 +86,7 @@ describe("Twitter Class", () => {
         media: ["profile_image_url"],
       });
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
 
     it("Should be get timeline by user id", async () => {
@@ -90,13 +94,13 @@ describe("Twitter Class", () => {
         media: ["profile_image_url"],
       });
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
 
     it("Should be get followers by user id", async () => {
       const response = await app.getFollowersById("2244994945", { max: 1 });
 
-      expect(response.data.mocked).toBe(true);
+      expect(response.mocked).toBe(true);
     });
   });
 
@@ -104,37 +108,37 @@ describe("Twitter Class", () => {
     it("Should be create tweet", async () => {
       const response = await app.createTweet({ text: "Hello!" });
 
-      expect(response).toBe({ mocked: true }.toString());
+      expect(response).toStrictEqual({ mocked: true });
     });
 
     it("Should be delete tweet", async () => {
       const response = await app.deleteTweet("2244994945");
 
-      expect(response).toBe({ mocked: true }.toString());
+      expect(response).toStrictEqual({ mocked: true });
     });
 
     it("Should be follow user by id", async () => {
       const response = await app.followUserId("2244994945", "2244994945");
 
-      expect(response).toBe({ mocked: true }.toString());
+      expect(response).toStrictEqual({ mocked: true });
     });
 
     it("Should be unfollow user by id", async () => {
       const response = await app.unfollowUserId("2244994945", "2244994945");
 
-      expect(response).toBe({ mocked: true }.toString());
+      expect(response).toStrictEqual({ mocked: true });
     });
 
     it("Should be follow user by username", async () => {
       const response = await app.followUsername("TwitterDev", "TwitterDev");
 
-      expect(response).toBe({ mocked: true }.toString());
+      expect(response).toStrictEqual({ mocked: true });
     });
 
     it("Should be unfollow user by username", async () => {
       const response = await app.unfolowUsername("TwitterDev", "TwitterDev");
 
-      expect(response).toBe({ mocked: true }.toString());
+      expect(response).toStrictEqual({ mocked: true });
     });
   });
 
