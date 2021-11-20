@@ -64,7 +64,8 @@ var TwitterApi = /** @class */ (function () {
             "AcessSecret",
         ];
         var objectKeys = Object.keys(data);
-        if (!objectKeys.includes("BearerToken") && objectKeys !== array) {
+        if (!objectKeys.includes("BearerToken") &&
+            array.sort().join(",") !== objectKeys.sort().join(",")) {
             throw new Error("Ao menos um método de login é necessário");
         }
         var baseURL = "https://api.twitter.com/2";
@@ -102,12 +103,22 @@ var TwitterApi = /** @class */ (function () {
                     timestamp: Math.floor(new Date().getTime() / 1000),
                 } }, params);
         };
+        var checkFields = function (fields, isQueryParams) {
+            return (fields === null || fields === void 0 ? void 0 : fields.length)
+                ? "".concat(isQueryParams ? "&" : "?", "user.fields=") + fields.join("&")
+                : "";
+        };
+        var getArrayFields = function (fields) {
+            return fields ? Object.entries(fields) : [];
+        };
         var obj = {
             user: "user.fields",
             tweet: "tweet.fields",
             expansions: "expansions",
             media: "media.fields",
         };
+        this.getArrayFields = getArrayFields;
+        this.checkFields = checkFields;
         this.obj = obj;
         this.getParams = getParams;
         this.api = api;
@@ -125,7 +136,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "?user.fields=" + fields.join("&") : "";
+                        params = this.checkFields(fields);
                         return [4 /*yield*/, this.api
                                 .get("/users/by/username/".concat(username).concat(params))
                                 .catch(function (error) {
@@ -145,7 +156,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "&user.fields=" + fields.join("&") : "";
+                        params = this.checkFields(fields, true);
                         usernamesFormated = usernames.join(",");
                         return [4 /*yield*/, this.api
                                 .get("/users/by?usernames=".concat(usernamesFormated).concat(params))
@@ -166,7 +177,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "?user.fields=" + fields.join("&") : "";
+                        params = this.checkFields(fields);
                         return [4 /*yield*/, this.api
                                 .get("/users/".concat(id).concat(params))
                                 .catch(function (error) {
@@ -186,7 +197,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        params = (fields === null || fields === void 0 ? void 0 : fields.length) ? "&user.fields=" + fields.join("&") : "";
+                        params = this.checkFields(fields, true);
                         ids = id.join(",");
                         return [4 /*yield*/, this.api
                                 .get("/users?ids=".concat(ids).concat(params))
@@ -207,7 +218,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        arrayFields = fields ? Object.entries(fields) : [];
+                        arrayFields = this.getArrayFields(fields);
                         params = this.getParams(arrayFields, this.obj);
                         return [4 /*yield*/, this.api
                                 .get("/tweets/".concat(id).concat(params.join("")))
@@ -228,7 +239,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        arrayFields = fields ? Object.entries(fields) : [];
+                        arrayFields = this.getArrayFields(fields);
                         ids = id.join(",");
                         params = this.getParams(arrayFields, this.obj, true);
                         return [4 /*yield*/, this.api
@@ -250,7 +261,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        arrayFields = fields ? Object.entries(fields) : [];
+                        arrayFields = this.getArrayFields(fields);
                         params = this.getParams(arrayFields, this.obj);
                         return [4 /*yield*/, this.api
                                 .get("/users/".concat(id, "/tweets").concat(params.join("")))
@@ -305,7 +316,7 @@ var TwitterApi = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        arrayFields = fields ? Object.entries(fields) : [];
+                        arrayFields = this.getArrayFields(fields);
                         params = [];
                         for (_i = 0, arrayFields_1 = arrayFields; _i < arrayFields_1.length; _i++) {
                             _a = arrayFields_1[_i], fieldName = _a[0], fieldValues = _a[1];
