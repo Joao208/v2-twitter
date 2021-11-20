@@ -8,6 +8,12 @@ jest.mock("request");
 describe("Twitter Class", () => {
   let app;
 
+  const interceptorsReturn = {
+    request: {
+      use: jest.fn((callback) => callback({ headers: {} })),
+    },
+  };
+
   beforeAll(() => {
     // @ts-ignore
     axios.create.mockImplementation(() => ({
@@ -15,11 +21,7 @@ describe("Twitter Class", () => {
         data: { mocked: true },
         catch: jest.fn().mockReturnValue({ data: { mocked: true } }),
       }),
-      interceptors: {
-        request: {
-          use: jest.fn((callback) => callback(true)),
-        },
-      },
+      interceptors: interceptorsReturn,
     }));
 
     // @ts-ignore
@@ -39,11 +41,11 @@ describe("Twitter Class", () => {
     app = new TwitterApi({ BearerToken: "" });
   });
 
-  describe("Should be test with bearer token", () => {
-    it("Should be defined", () => {
-      expect(new TwitterApi({ BearerToken: "" })).toBeDefined();
-    });
+  it("Should be defined", () => {
+    expect(new TwitterApi({ BearerToken: "" })).toBeDefined();
+  });
 
+  describe("Should be test with bearer token", () => {
     it("Should be get user by username", async () => {
       const response = await app.getUserByUsername("TwitterDev", [
         "profile_image_url",
@@ -147,14 +149,144 @@ describe("Twitter Class", () => {
     });
   });
 
-  describe("Should be test validations", () => {
-    expect.assertions(3);
+  describe("Should be test catch errors", () => {
+    beforeAll(() => {
+      // @ts-ignore
+      axios.create.mockImplementation(() => ({
+        get: jest.fn().mockReturnValue({
+          data: { mocked: true },
+          catch: jest.fn((callback) =>
+            callback({ response: { data: { error: true } } })
+          ),
+        }),
+        interceptors: {
+          request: {
+            use: jest.fn((callback) => callback(true)),
+          },
+        },
+      }));
 
-    try {
-      new TwitterApi({});
-    } catch (error) {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe("Ao menos um método de login é necessário");
-    }
+      app = new TwitterApi({
+        AcessSecret: "",
+        BearerToken: "",
+        AcessToken: "",
+        ConsumerKey: "",
+        ConsumerSecret: "",
+      });
+    });
+
+    it("Should throw new error in get user by username", async () => {
+      expect.assertions(2);
+
+      try {
+        await app.getUserByUsername("TwitterDev", ["profile_image_url"]);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+
+    it("Should throw new error in get many users by username", async () => {
+      expect.assertions(2);
+
+      try {
+        await app.getUsersByUsersname(["TwitterDev"], ["picture"]);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+
+    it("Should throw new error in get user by user id", async () => {
+      expect.assertions(2);
+
+      try {
+        await app.getUserById("2244994945", ["profile_image_url"]);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+
+    it("Should throw new error in get many user by user id", async () => {
+      expect.assertions(2);
+
+      try {
+        await app.getUsersById(["2244994945"], ["profile_image_url"]);
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+
+    it("Should throw new error in get single tweet by id", async () => {
+      expect.assertions(2);
+
+      try {
+        await app.getSingleTweet("2244994945");
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+
+    it("Should throw new error in get multiple tweets by id", async () => {
+      expect.assertions(2);
+
+      try {
+        await app.getMultipleTweets(["2244994945"], {
+          media: ["profile_image_url"],
+        });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+
+    it("Should throw new error in get timeline by user id", async () => {
+      expect.assertions(2);
+
+      try {
+        await app.getTimelineByUserId("2244994945", {
+          media: ["profile_image_url"],
+        });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+
+    it("Should throw new error in get followers by user id", async () => {
+      try {
+        await app.getFollowersById("2244994945", { max: 1, pagination: "10" });
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe(JSON.stringify({ error: true }));
+      }
+    });
+  });
+
+  describe("Should be test validations", () => {
+    it("Should be pass without add bearer token", () => {
+      new TwitterApi({
+        AcessSecret: "",
+        AcessToken: "",
+        ConsumerKey: "",
+        ConsumerSecret: "",
+      });
+
+      expect(interceptorsReturn.request.use).not.toBeCalled();
+    });
+
+    it("Should be throw an error if params is empty", () => {
+      expect.assertions(2);
+
+      try {
+        new TwitterApi({});
+      } catch (error) {
+        expect(error).toBeInstanceOf(Error);
+        expect(error.message).toBe("Ao menos um método de login é necessário");
+      }
+    });
   });
 });

@@ -19,6 +19,8 @@ class TwitterApi {
     obj: { [key: string]: string },
     isQueryParams?: boolean
   ) => Array<String>;
+  checkFields: (fields?: Array<String>, isQueryParams?: boolean) => String;
+  getArrayFields: (fields?: Fields | FieldsFollowers) => Array<any>;
 
   constructor(data: ParamsInterface) {
     const {
@@ -38,7 +40,10 @@ class TwitterApi {
 
     const objectKeys = Object.keys(data);
 
-    if (!objectKeys.includes("BearerToken") && objectKeys !== array) {
+    if (
+      !objectKeys.includes("BearerToken") &&
+      array.sort().join(",") !== objectKeys.sort().join(",")
+    ) {
       throw new Error("Ao menos um método de login é necessário");
     }
 
@@ -92,6 +97,16 @@ class TwitterApi {
       };
     };
 
+    const checkFields = (fields?: Array<String>, isQueryParams?: boolean) => {
+      return fields?.length
+        ? `${isQueryParams ? "&" : "?"}user.fields=` + fields.join("&")
+        : "";
+    };
+
+    const getArrayFields = (fields?: Fields | FieldsFollowers) => {
+      return fields ? Object.entries(fields) : [];
+    };
+
     const obj = {
       user: "user.fields",
       tweet: "tweet.fields",
@@ -99,6 +114,8 @@ class TwitterApi {
       media: "media.fields",
     };
 
+    this.getArrayFields = getArrayFields;
+    this.checkFields = checkFields;
     this.obj = obj;
     this.getParams = getParams;
     this.api = api;
@@ -112,7 +129,7 @@ class TwitterApi {
   }
 
   async getUserByUsername(username: string, fields?: Array<string>) {
-    const params = fields?.length ? "?user.fields=" + fields.join("&") : "";
+    const params = this.checkFields(fields);
 
     const response = await this.api
       .get(`/users/by/username/${username}${params}`)
@@ -124,7 +141,7 @@ class TwitterApi {
   }
 
   async getUsersByUsersname(usernames: Array<String>, fields?: Array<string>) {
-    const params = fields?.length ? "&user.fields=" + fields.join("&") : "";
+    const params = this.checkFields(fields, true);
     const usernamesFormated = usernames.join(",");
 
     const response = await this.api
@@ -137,7 +154,7 @@ class TwitterApi {
   }
 
   async getUserById(id: string, fields?: Array<string>) {
-    const params = fields?.length ? "?user.fields=" + fields.join("&") : "";
+    const params = this.checkFields(fields);
 
     const response = await this.api
       .get(`/users/${id}${params}`)
@@ -149,7 +166,7 @@ class TwitterApi {
   }
 
   async getUsersById(id: Array<string>, fields?: Array<string>) {
-    const params = fields?.length ? "&user.fields=" + fields.join("&") : "";
+    const params = this.checkFields(fields, true);
     const ids = id.join(",");
 
     const response = await this.api
@@ -162,7 +179,7 @@ class TwitterApi {
   }
 
   async getSingleTweet(id: string, fields?: Fields) {
-    const arrayFields = fields ? Object.entries(fields) : [];
+    const arrayFields = this.getArrayFields(fields);
 
     const params = this.getParams(arrayFields, this.obj);
 
@@ -176,7 +193,7 @@ class TwitterApi {
   }
 
   async getMultipleTweets(id: Array<string>, fields?: Fields) {
-    const arrayFields = fields ? Object.entries(fields) : [];
+    const arrayFields = this.getArrayFields(fields);
     const ids = id.join(",");
 
     const params = this.getParams(arrayFields, this.obj, true);
@@ -191,7 +208,7 @@ class TwitterApi {
   }
 
   async getTimelineByUserId(id: string, fields?: Fields) {
-    const arrayFields = fields ? Object.entries(fields) : [];
+    const arrayFields = this.getArrayFields(fields);
 
     const params = this.getParams(arrayFields, this.obj);
 
@@ -235,7 +252,7 @@ class TwitterApi {
   }
 
   async getFollowersById(id: string, fields?: FieldsFollowers) {
-    const arrayFields = fields ? Object.entries(fields) : [];
+    const arrayFields = this.getArrayFields(fields);
 
     const params = [];
 
