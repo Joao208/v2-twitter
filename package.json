@@ -1,6 +1,6 @@
 {
   "name": "v2-twitter",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "typings": "./src/index.ts",
   "main": "dist/index.js",
   "repository": "https://github.com/Joao208/v2-twitter",
