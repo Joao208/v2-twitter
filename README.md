@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/Joao208/v2-twitter/branch/main/graph/badge.svg?token=YK3MIN9SMX)](https://codecov.io/gh/Joao208/v2-twitter)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=Joao208_v2-twitter&metric=alert_status)](https://sonarcloud.io/dashboard?id=Joao208_v2-twitter)
 
-Twitter api, using [V2](https://developer.twitter.com/en), for use, create new instance of api, no parameter is necessary, but if you don't pass BearerToken, the others params `ConsumerKey, ConsumerSecret, AcessToken, AcessSecret` are necessary, but you can pass all parameters
+Twitter api, using [V2](https://developer.twitter.com/en), for use, create new instance of api, no parameter is necessary, but if you don't pass BearerToken, the others params `ConsumerKey, ConsumerSecret, AccessToken, AccessSecret` are necessary, but you can pass all parameters
 
 ```js
 import TwitterApi from 'v2-twitter'
@@ -13,13 +13,13 @@ const twitter = new TwitterApi({
   BearerToken: "",
   ConsumerKey: "",
   ConsumerSecret: "",
-  AcessToken: "",
-  AcessSecret: "",
+  AccessToken: "",
+  AccessSecret: "",
 });
 ```
 #### Get An User By Username
 
-For get all user informations:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
+For get all user information's:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -37,11 +37,11 @@ twitter
 
 #### Get Many Users For Username
 
-For get all user informations for many users:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
+For get all user information's for many users:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
-  .getUsersByUsersname(["TwitterDev"], ['profile_image_url'])
+  .getUsersByUsername(["TwitterDev"], ['profile_image_url'])
   .then((data) => console.log(data));
 
 // {
@@ -57,7 +57,7 @@ twitter
 
 #### Get User For UserId
 
-For get all user informations by user id:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
+For get all user information's by user id:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -75,7 +75,7 @@ twitter
 
 #### Get Many Users For UserId
 
-For get all user informations by user id for many users:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
+For get all user information's by user id for many users:, all parameters and fields can be consulted [here](https://developer.twitter.com/en/docs/twitter-api/fields)
 
 ```js
 twitter
@@ -277,7 +277,7 @@ For unfollow a user by username:
 
 ```js
 twitter
-  .unfolowUsername('TwitterDev', 'TwitterDev')
+  .unfollowUsername('TwitterDev', 'TwitterDev')
   .then((data) => console.log(data));
 
 // {

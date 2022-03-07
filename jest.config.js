@@ -1,5 +1,5 @@
 module.exports = {
-  name: "errors-stack",
+  name: 'errors-stack',
   coverageThreshold: {
     global: {
       branches: 0,
@@ -8,11 +8,11 @@ module.exports = {
       statements: 0,
     },
   },
-  collectCoverageFrom: ["**/src/**/*.ts"],
-  testEnvironment: "node",
-  testMatch: ["**/**/**/*.test.ts"],
-  coverageDirectory: "./coverage",
+  collectCoverageFrom: ['**/src/**/*.ts'],
+  testEnvironment: 'node',
+  testMatch: ['**/**/**/*.test.ts'],
+  coverageDirectory: './coverage',
   clearMocks: true,
   restoreMocks: true,
-  reporters: ["default"],
+  reporters: ['default'],
 };

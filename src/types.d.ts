@@ -1,23 +1,23 @@
 export interface ParamsInterface {
-  BearerToken?: string;
-  ConsumerKey?: string;
-  ConsumerSecret?: string;
-  AcessToken?: string;
-  AcessSecret?: string;
+  BearerToken?: string
+  ConsumerKey?: string
+  ConsumerSecret?: string
+  AccessToken?: string
+  AccessSecret?: string
 }
 
 export interface Fields {
-  user?: Array<string>;
-  tweet?: Array<string>;
-  expansions?: Array<string>;
-  media?: Array<string>;
+  user?: Array<string>
+  tweet?: Array<string>
+  expansions?: Array<string>
+  media?: Array<string>
 }
 
 export interface BodyTwitter {
-  text: string;
+  text: string
 }
 
 export interface FieldsFollowers {
-  pagination?: string;
-  max?: number;
+  pagination?: string
+  max?: number
 }
